@@ -7,7 +7,8 @@ module.exports = async function (context, req) {
 
     //Cognitive Services API Credentials
     var serviceKey = '71c926b6c944490c9a3cd3da3cf1083b';
-    var region = 'westeurope';
+    var region = 'northeurope';
+    var endpoint = 'https://'+region+'.api.cognitive.microsoft.com';
     var credentials = new CognitiveServicesCredentials(serviceKey);
     var computerVisionApiClient = new Vision.ComputerVisionAPIClient(credentials, region);
 
