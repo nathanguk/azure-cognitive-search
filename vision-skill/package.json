@@ -1,0 +1,15 @@
+{
+  "name": "vision-skill",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "azure-cognitiveservices-vision": "^2.0.0",
+    "ms-rest-azure": "^3.0.0"
+  }
+}
