@@ -18,35 +18,37 @@ module.exports = async function (context, req) {
     //Parse all records input
     for(var value of req.body.values){
 
+        context.log(JSON.stringify(value));
+
         //Input Blob
-        var myBlob = value.data.imageData;
+        //var myBlob = value.data.imageData;
 
         //Call Image Service
-        var text = await imageQuery(myBlob);
-        context.log(JSON.stringify(text));
+        //var text = await imageQuery(myBlob);
+        //context.log(JSON.stringify(text));
 
-        var record = {
-            "recordId": value.recordId,
-            "data": {
-                "descriptions": [
-                    {
-                        "value": "description",
-                        "description": text
-                    }
-                ]
-            },
-            "errors": [],
-            "warnings": []
-        }
+        // var record = {
+        //     "recordId": value.recordId,
+        //     "data": {
+        //         "descriptions": [
+        //             {
+        //                 "value": "description",
+        //                 "description": text
+        //             }
+        //         ]
+        //     },
+        //     "errors": [],
+        //     "warnings": []
+        // }
 
-        values.push(record);
+        // values.push(record);
 
     };
 
 
     //Response Body
     var body = {
-        "values": [values]
+       // "values": [values]
     };
 
     //Log Response Body
@@ -66,9 +68,6 @@ module.exports = async function (context, req) {
         await computerVisionApiClient.analyzeImageInStream(myBlob, {visualFeatures: ["Categories", "Tags", "Description", "Color"]})
           
             .then(async function(data){    
-                // Log response
-                context.log("data: " + JSON.stringify(data));
-
                 return data.description.captions[0].text
 
             })
