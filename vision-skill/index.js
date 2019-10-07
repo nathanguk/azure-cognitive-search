@@ -22,6 +22,7 @@ module.exports = async function (context, req) {
 
         //Call Image Service
         var text = await imageQuery(myBlob);
+        context.log(JSON.stringify(text));
 
         var record = {
             "recordId": value.recordId,
