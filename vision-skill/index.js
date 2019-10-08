@@ -39,8 +39,11 @@ module.exports = async function (context, req) {
 
     //Return Response
     context.res = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
         status: 200,
-        body: JSON.parse(body)
+        body:body
     };
 
     
