@@ -22,7 +22,7 @@ module.exports = async function (context, req) {
         let buff = Buffer.from(value.data.imageData.data, 'base64'); 
 
         //Call Image Service and get record
-        var text = await imageQuery(buff, value);
+        await imageQuery(buff, value);
 
     };
 
@@ -48,7 +48,8 @@ module.exports = async function (context, req) {
     //Function to get Image Attributes
     async function imageQuery(myBlob, value){
         context.log("Calling Vision API");
-
+        context.log(JSON.stringify(value.data));
+        
         await computerVisionApiClient.analyzeImageInStream(myBlob, {visualFeatures: ["Categories", "Tags", "Description", "Color"]})
           
             .then(async function(data){
@@ -78,7 +79,7 @@ module.exports = async function (context, req) {
             })
 
             .catch(function(err) {
-                context.log('Error: ' + err);
+                context.log('Caught Error: ' + err.message);
 
                 var record = {
                     "recordId": value.recordId,
