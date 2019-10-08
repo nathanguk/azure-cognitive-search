@@ -23,23 +23,8 @@ module.exports = async function (context, req) {
         //Input Blob
         let buff = Buffer.from(value.data.imageData.data, 'base64'); 
 
-        //Call Image Service
-        var text = await imageQuery(buff);
-
-        var record = {
-            "recordId": value.recordId,
-            "data": {
-                "descriptions": [
-                    {
-                        "value": "description",
-                        "description": text
-                    }
-                ]
-            },
-            "errors": [],
-            "warnings": []
-        }
-
+        //Call Image Service and get record
+        var record = await imageQuery(buff, value);
         values.push(record);
 
     };
@@ -61,7 +46,7 @@ module.exports = async function (context, req) {
 
     
     //Function to get Image Attributes
-    async function imageQuery(myBlob){
+    async function imageQuery(myBlob, value){
         context.log("Calling Vision API");
 
         await computerVisionApiClient.analyzeImageInStream(myBlob, {visualFeatures: ["Categories", "Tags", "Description", "Color"]})
@@ -70,13 +55,47 @@ module.exports = async function (context, req) {
 
                 var text = data.description.captions[0].text 
                 context.log('text: ' + text);
-                return text
+
+                var record = {
+                    "recordId": value.recordId,
+                    "data": {
+                        "descriptions": [
+                            {
+                                "value": "description",
+                                "description": ""
+                            }
+                        ]
+                    },
+                    "errors": [],
+                    "warnings": []
+                }
+
+                record.data.descriptions[0].description = text;
+
+                return record
 
             })
 
             .catch(function(err) {
-                context.log("Error: " + err);
-                context.done(null, err);
+
+                var record = {
+                    "recordId": value.recordId,
+                    "data": {
+                        "descriptions": [
+                            {
+                                "value": "description",
+                                "description": ""
+                            }
+                        ]
+                    },
+                    "errors": [],
+                    "warnings": []
+                }
+
+                record.errors = [err];
+
+                return record
+
             })
 
     };  
