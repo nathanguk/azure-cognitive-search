@@ -40,7 +40,7 @@ module.exports = async function (context, req) {
     //Return Response
     context.res = {
         status: 200,
-        body: body
+        body: JSON.parse(body)
     };
 
     
@@ -52,8 +52,6 @@ module.exports = async function (context, req) {
           
             .then(async function(data){   
                 var text = data.description.captions[0].text 
-
-                context.log('text: ' + text);
 
                 var record = {
                     "recordId": value.recordId,
