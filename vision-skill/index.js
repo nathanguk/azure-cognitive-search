@@ -21,27 +21,28 @@ module.exports = async function (context, req) {
         context.log(JSON.stringify(value));
 
         //Input Blob
-        //var myBlob = value.data.imageData;
+        let buff = Buffer.from(encodedData, value.data.imageData); 
+        //var myBlob = await fsPromises.write   File('my-file.jpg', buff)
 
         //Call Image Service
-        //var text = await imageQuery(myBlob);
-        //context.log(JSON.stringify(text));
+        var text = await imageQuery(buff);
+        context.log(JSON.stringify(text));
 
-        // var record = {
-        //     "recordId": value.recordId,
-        //     "data": {
-        //         "descriptions": [
-        //             {
-        //                 "value": "description",
-        //                 "description": text
-        //             }
-        //         ]
-        //     },
-        //     "errors": [],
-        //     "warnings": []
-        // }
+        var record = {
+            "recordId": value.recordId,
+            "data": {
+                "descriptions": [
+                    {
+                        "value": "description",
+                        "description": text
+                    }
+                ]
+            },
+            "errors": [],
+            "warnings": []
+        }
 
-        // values.push(record);
+        values.push(record);
 
     };
 
