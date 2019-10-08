@@ -32,9 +32,6 @@ module.exports = async function (context, req) {
        "values": values
     };
 
-    //Log Response Body
-    context.log(JSON.stringify(body));
-
     //Return Response
     context.res = {
         headers: {
