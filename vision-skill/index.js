@@ -24,7 +24,24 @@ module.exports = async function (context, req) {
         let buff = Buffer.from(value.data.imageData.data, 'base64'); 
 
         //Call Image Service and get record
-        var record = await imageQuery(buff, value);
+        var text = await imageQuery(buff);
+
+        var record = {
+            "recordId": value.recordId,
+            "data": {
+                "descriptions": [
+                    {
+                        "value": "description",
+                        "description": ""
+                    }
+                ]
+            },
+            "errors": [],
+            "warnings": []
+        }
+
+        record.data.descriptions[0].description = text;
+
         values.push(record);
 
     };
@@ -52,49 +69,16 @@ module.exports = async function (context, req) {
         await computerVisionApiClient.analyzeImageInStream(myBlob, {visualFeatures: ["Categories", "Tags", "Description", "Color"]})
           
             .then(async function(data){   
-
                 var text = data.description.captions[0].text 
                 context.log('text: ' + text);
-
-                var record = {
-                    "recordId": value.recordId,
-                    "data": {
-                        "descriptions": [
-                            {
-                                "value": "description",
-                                "description": ""
-                            }
-                        ]
-                    },
-                    "errors": [],
-                    "warnings": []
-                }
-
-                record.data.descriptions[0].description = text;
-
-                return record
+                return text
 
             })
 
             .catch(function(err) {
-
-                var record = {
-                    "recordId": value.recordId,
-                    "data": {
-                        "descriptions": [
-                            {
-                                "value": "description",
-                                "description": ""
-                            }
-                        ]
-                    },
-                    "errors": [],
-                    "warnings": []
-                }
-
-                record.errors = [err];
-
-                return record
+                context.log('Error: ' + err);
+                var text = "";
+                return text
 
             })
 
