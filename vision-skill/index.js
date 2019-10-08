@@ -64,8 +64,8 @@ module.exports = async function (context, req) {
                             }
                         ]
                     },
-                    "errors": [],
-                    "warnings": []
+                    "errors": null,
+                    "warnings": null
                 }
         
                 values.push(record);
@@ -78,8 +78,12 @@ module.exports = async function (context, req) {
                 var record = {
                     "recordId": value.recordId,
                     "data": {},
-                    "errors": [err.message],
-                    "warnings": []
+                    "errors": [
+                        {
+                            "message": err.message
+                        }
+                    ],
+                    "warnings": null
                 }
         
                 values.push(record);
