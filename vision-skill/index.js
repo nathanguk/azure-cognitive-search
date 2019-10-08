@@ -22,7 +22,6 @@ module.exports = async function (context, req) {
 
         //Input Blob
         let buff = Buffer.from(value.data.imageData.data, 'base64'); 
-        //var myBlob = await fsPromises.write   File('my-file.jpg', buff)
 
         //Call Image Service
         var text = await imageQuery(buff);
@@ -69,6 +68,7 @@ module.exports = async function (context, req) {
         await computerVisionApiClient.analyzeImageInStream(myBlob, {visualFeatures: ["Categories", "Tags", "Description", "Color"]})
           
             .then(async function(data){    
+                context.log(JSON.stringify(data));
                 return data.description.captions[0].text
 
             })
