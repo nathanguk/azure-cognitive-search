@@ -1,0 +1,358 @@
+{
+    "@odata.context": "https://iwm-search-service-4udl2dvx5prws.search.windows.net/$metadata#skillsets/$entity",
+    "@odata.etag": "\"0x8D74BE74A2A830C\"",
+    "name": "jfkskillset",
+    "description": "JFK Files Skillset",
+    "skills": [
+      {
+        "@odata.type": "#Microsoft.Skills.Vision.OcrSkill",
+        "name": "#1",
+        "description": null,
+        "context": "/document/normalized_images/*",
+        "textExtractionAlgorithm": null,
+        "lineEnding": "Space",
+        "defaultLanguageCode": "en",
+        "detectOrientation": true,
+        "inputs": [
+          {
+            "name": "image",
+            "source": "/document/normalized_images/*"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "text",
+            "targetName": "text"
+          },
+          {
+            "name": "layoutText",
+            "targetName": "layoutText"
+          }
+        ]
+      },
+      {
+        "@odata.type": "#Microsoft.Skills.Vision.ImageAnalysisSkill",
+        "name": "#2",
+        "description": null,
+        "context": "/document/normalized_images/*",
+        "defaultLanguageCode": "en",
+        "visualFeatures": [
+          "tags",
+          "description"
+        ],
+        "details": [
+          "celebrities"
+        ],
+        "inputs": [
+          {
+            "name": "image",
+            "source": "/document/normalized_images/*"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "tags",
+            "targetName": "Tags"
+          },
+          {
+            "name": "description",
+            "targetName": "Description"
+          }
+        ]
+      },
+      {
+        "@odata.type": "#Microsoft.Skills.Text.MergeSkill",
+        "name": "#3",
+        "description": "Merge native text content and inline OCR content where images were present",
+        "context": "/document",
+        "insertPreTag": " ",
+        "insertPostTag": " ",
+        "inputs": [
+          {
+            "name": "text",
+            "source": "/document/content"
+          },
+          {
+            "name": "itemsToInsert",
+            "source": "/document/normalized_images/*/text"
+          },
+          {
+            "name": "offsets",
+            "source": "/document/normalized_images/*/contentOffset"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "mergedText",
+            "targetName": "nativeTextAndOcr"
+          }
+        ]
+      },
+      {
+        "@odata.type": "#Microsoft.Skills.Text.MergeSkill",
+        "name": "#4",
+        "description": "Merge text content with image captions",
+        "context": "/document",
+        "insertPreTag": " ",
+        "insertPostTag": " ",
+        "inputs": [
+          {
+            "name": "text",
+            "source": "/document/nativeTextAndOcr"
+          },
+          {
+            "name": "itemsToInsert",
+            "source": "/document/normalized_images/*/Description/captions/*/text"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "mergedText",
+            "targetName": "fullTextAndCaptions"
+          }
+        ]
+      },
+      {
+        "@odata.type": "#Microsoft.Skills.Text.MergeSkill",
+        "name": "#5",
+        "description": "Merge text content with image tags",
+        "context": "/document",
+        "insertPreTag": " ",
+        "insertPostTag": " ",
+        "inputs": [
+          {
+            "name": "text",
+            "source": "/document/fullTextAndCaptions"
+          },
+          {
+            "name": "itemsToInsert",
+            "source": "/document/normalized_images/*/Tags/*/name"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "mergedText",
+            "targetName": "finalText"
+          }
+        ]
+      },
+      {
+        "@odata.type": "#Microsoft.Skills.Text.SplitSkill",
+        "name": "#6",
+        "description": "Split text into pages for subsequent skill processing",
+        "context": "/document/finalText",
+        "defaultLanguageCode": "en",
+        "textSplitMode": "pages",
+        "maximumPageLength": 5000,
+        "inputs": [
+          {
+            "name": "text",
+            "source": "/document/finalText"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "textItems",
+            "targetName": "pages"
+          }
+        ]
+      },
+      {
+        "@odata.type": "#Microsoft.Skills.Text.LanguageDetectionSkill",
+        "name": "#7",
+        "description": null,
+        "context": "/document",
+        "inputs": [
+          {
+            "name": "text",
+            "source": "/document/finalText"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "languageCode",
+            "targetName": "languageCode"
+          }
+        ]
+      },
+      {
+        "@odata.type": "#Microsoft.Skills.Text.EntityRecognitionSkill",
+        "name": "#8",
+        "description": null,
+        "context": "/document/finalText/pages/*",
+        "categories": [
+          "person",
+          "location",
+          "organization"
+        ],
+        "defaultLanguageCode": "en",
+        "minimumPrecision": null,
+        "includeTypelessEntities": null,
+        "inputs": [
+          {
+            "name": "text",
+            "source": "/document/finalText/pages/*"
+          },
+          {
+            "name": "languageCode",
+            "source": "/document/languageCode"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "persons",
+            "targetName": "people"
+          },
+          {
+            "name": "locations",
+            "targetName": "locations"
+          },
+          {
+            "name": "organizations",
+            "targetName": "organizations"
+          },
+          {
+            "name": "namedEntities",
+            "targetName": "entities"
+          }
+        ]
+      },
+      {
+        "@odata.type": "#Microsoft.Skills.Util.ShaperSkill",
+        "name": "#9",
+        "description": "Create a custom OCR image metadata object used to generate an HOCR document",
+        "context": "/document/normalized_images/*",
+        "inputs": [
+          {
+            "name": "layoutText",
+            "source": "/document/normalized_images/*/layoutText"
+          },
+          {
+            "name": "imageStoreUri",
+            "source": "/document/normalized_images/*/imageStoreUri"
+          },
+          {
+            "name": "width",
+            "source": "/document/normalized_images/*/width"
+          },
+          {
+            "name": "height",
+            "source": "/document/normalized_images/*/height"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "output",
+            "targetName": "ocrImageMetadata"
+          }
+        ]
+      },
+      {
+        "@odata.type": "#Microsoft.Skills.Custom.WebApiSkill",
+        "name": "#10",
+        "description": "Upload image data to the annotation store",
+        "context": "/document/normalized_images/*",
+        "uri": "https://iwm-function-app-4udl2dvx5prws.azurewebsites.net/api/image-store?code=ugQc609x/Hbix1YyNPaGh7B7FUfd6ED/wIPNEYOAagPBQPFUhBdJDA==",
+        "httpMethod": "POST",
+        "timeout": "PT30S",
+        "batchSize": 1,
+        "degreeOfParallelism": null,
+        "inputs": [
+          {
+            "name": "imageData",
+            "source": "/document/normalized_images/*/data"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "imageStoreUri",
+            "targetName": "imageStoreUri"
+          }
+        ],
+        "httpHeaders": {
+          "BlobContainerName": "imagestoreblob"
+        }
+      },
+      {
+        "@odata.type": "#Microsoft.Skills.Custom.WebApiSkill",
+        "name": "ANS Custom Skill",
+        "description": "ANS - NodeJS Function to get description from Vision API",
+        "context": "/document/normalized_images/*",
+        "uri": "https://iwm-function-app-nodejs.azurewebsites.net/api/vision-skill?code=7xdFjmGZ7IzXSLtsUgjn4qO9RmHtl1yBn0o1NX658PWfV9yUMvHLBQ==",
+        "httpMethod": "POST",
+        "timeout": "PT30S",
+        "batchSize": 1,
+        "degreeOfParallelism": null,
+        "inputs": [
+          {
+            "name": "imageData",
+            "source": "/document/normalized_images/*"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "description",
+            "targetName": "description"
+          }
+        ],
+        "httpHeaders": {}
+      },
+      {
+        "@odata.type": "#Microsoft.Skills.Custom.WebApiSkill",
+        "name": "#11",
+        "description": "Generate HOCR for webpage rendering",
+        "context": "/document",
+        "uri": "https://iwm-function-app-4udl2dvx5prws.azurewebsites.net/api/hocr-generator?code=ugQc609x/Hbix1YyNPaGh7B7FUfd6ED/wIPNEYOAagPBQPFUhBdJDA==",
+        "httpMethod": "POST",
+        "timeout": "PT30S",
+        "batchSize": 1,
+        "degreeOfParallelism": null,
+        "inputs": [
+          {
+            "name": "ocrImageMetadataList",
+            "source": "/document/normalized_images/*/ocrImageMetadata"
+          },
+          {
+            "name": "wordAnnotations",
+            "source": "/document/cryptonyms"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "hocrDocument",
+            "targetName": "hocrDocument"
+          }
+        ],
+        "httpHeaders": {}
+      },
+      {
+        "@odata.type": "#Microsoft.Skills.Custom.WebApiSkill",
+        "name": "#12",
+        "description": "Cryptonym linker",
+        "context": "/document",
+        "uri": "https://iwm-function-app-4udl2dvx5prws.azurewebsites.net/api/link-cryptonyms-list?code=ugQc609x/Hbix1YyNPaGh7B7FUfd6ED/wIPNEYOAagPBQPFUhBdJDA==",
+        "httpMethod": "POST",
+        "timeout": "PT30S",
+        "batchSize": 1,
+        "degreeOfParallelism": null,
+        "inputs": [
+          {
+            "name": "words",
+            "source": "/document/normalized_images/*/layoutText/words/*/text"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "cryptonyms",
+            "targetName": "cryptonyms"
+          }
+        ],
+        "httpHeaders": {}
+      }
+    ],
+    "cognitiveServices": {
+      "@odata.type": "#Microsoft.Azure.Search.DefaultCognitiveServices",
+      "description": null
+    },
+    "knowledgeStore": null
+  }
