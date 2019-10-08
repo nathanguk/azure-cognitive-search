@@ -51,8 +51,13 @@ module.exports = async function (context, req) {
 
         await computerVisionApiClient.analyzeImageInStream(myBlob, {visualFeatures: ["Categories", "Tags", "Description", "Color"]})
           
-            .then(async function(data){   
-                var text = data.description.captions[0].text 
+            .then(async function(data){
+                
+                if(data.description.captions[0].text){
+                    var text = data.description.captions[0].text 
+                }else{
+                    var text = ""
+                };
 
                 var record = {
                     "recordId": value.recordId,
