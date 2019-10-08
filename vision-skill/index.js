@@ -21,7 +21,7 @@ module.exports = async function (context, req) {
         context.log(JSON.stringify(value));
 
         //Input Blob
-        let buff = Buffer.from(encodedData, value.data.imageData); 
+        let buff = Buffer.from(value.data.imageData, 'base64'); 
         //var myBlob = await fsPromises.write   File('my-file.jpg', buff)
 
         //Call Image Service
