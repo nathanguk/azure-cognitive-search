@@ -25,7 +25,6 @@ module.exports = async function (context, req) {
 
         //Call Image Service
         var text = await imageQuery(buff);
-        context.log(JSON.stringify(text));
 
         var record = {
             "recordId": value.recordId,
@@ -48,7 +47,7 @@ module.exports = async function (context, req) {
 
     //Response Body
     var body = {
-       // "values": [values]
+       "values": [values]
     };
 
     //Log Response Body
@@ -67,9 +66,11 @@ module.exports = async function (context, req) {
 
         await computerVisionApiClient.analyzeImageInStream(myBlob, {visualFeatures: ["Categories", "Tags", "Description", "Color"]})
           
-            .then(async function(data){    
-                context.log(JSON.stringify(data));
-                return data.description.captions[0].text
+            .then(async function(data){   
+
+                var text = data.description.captions[0].text 
+                context.log('text: ' + text);
+                return text
 
             })
 
