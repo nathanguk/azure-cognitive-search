@@ -68,26 +68,19 @@ module.exports = async function (context, req) {
                     "warnings": []
                 }
         
-                //Update the records description text
-                //record.data.descriptions[0].description = text;
-        
                 values.push(record);
 
             })
 
             .catch(function(err) {
                 context.log('Error: ' + err);
-                var text = "";
-                context.log('text: ' + text);
 
                 var record = {
                     "recordId": value.recordId,
                     "data": {},
-                    "errors": [err],
+                    "errors": [err.message],
                     "warnings": []
                 }
-        
-                //record.errors = [err];
         
                 values.push(record);
 
