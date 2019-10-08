@@ -54,7 +54,7 @@ module.exports = async function (context, req) {
 
                 context.log(JSON.stringify(data));
                 
-                if(data.description.captions[0].text){
+                if(data.description.captions.length > 0){
                     var text = data.description.captions[0].text 
                 }else{
                     var text = ""
@@ -84,12 +84,12 @@ module.exports = async function (context, req) {
                 var record = {
                     "recordId": value.recordId,
                     "data": null,
-                    "errors": [
+                    "errors": null,
+                    "warnings": [
                         {
                             "message": err.message
                         }
-                    ],
-                    "warnings": null
+                    ]
                 }
         
                 values.push(record);
