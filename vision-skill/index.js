@@ -6,8 +6,8 @@ module.exports = async function (context, req) {
     var CognitiveServicesCredentials = require('ms-rest-azure').CognitiveServicesCredentials;
 
     //Cognitive Services API Credentials
-    var serviceKey = '2d74a2b300764e779c0face7f5c78fff';
-    var region = 'northeurope';
+    var serviceKey = process.env.VISION_KEY;
+    var region = process.env.VISION_REGION;
     var endpoint = 'https://'+region+'.api.cognitive.microsoft.com';
     var credentials = new CognitiveServicesCredentials(serviceKey);
     var computerVisionApiClient = new Vision.ComputerVisionAPIClient(credentials, endpoint);
