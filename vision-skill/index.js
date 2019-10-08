@@ -48,8 +48,8 @@ module.exports = async function (context, req) {
     //Function to get Image Attributes
     async function imageQuery(myBlob, value){
         context.log("Calling Vision API");
-        context.log(JSON.stringify(value.data));
-        
+        context.log(JSON.stringify(value));
+
         await computerVisionApiClient.analyzeImageInStream(myBlob, {visualFeatures: ["Categories", "Tags", "Description", "Color"]})
           
             .then(async function(data){
