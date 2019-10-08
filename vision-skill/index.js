@@ -24,25 +24,7 @@ module.exports = async function (context, req) {
         let buff = Buffer.from(value.data.imageData.data, 'base64'); 
 
         //Call Image Service and get record
-        var text = await imageQuery(buff);
-
-        var record = {
-            "recordId": value.recordId,
-            "data": {
-                "descriptions": [
-                    {
-                        "value": "description",
-                        "description": ""
-                    }
-                ]
-            },
-            "errors": [],
-            "warnings": []
-        }
-
-        record.data.descriptions[0].description = text;
-
-        values.push(record);
+        var text = await imageQuery(buff, value);
 
     };
 
@@ -70,15 +52,51 @@ module.exports = async function (context, req) {
           
             .then(async function(data){   
                 var text = data.description.captions[0].text 
+
                 context.log('text: ' + text);
-                return text
+
+                var record = {
+                    "recordId": value.recordId,
+                    "data": {
+                        "descriptions": [
+                            {
+                                "value": "description",
+                                "description": ""
+                            }
+                        ]
+                    },
+                    "errors": [],
+                    "warnings": []
+                }
+        
+                record.data.descriptions[0].description = text;
+        
+                values.push(record);
 
             })
 
             .catch(function(err) {
                 context.log('Error: ' + err);
                 var text = "";
-                return text
+                context.log('text: ' + text);
+
+                var record = {
+                    "recordId": value.recordId,
+                    "data": {
+                        "descriptions": [
+                            {
+                                "value": "description",
+                                "description": ""
+                            }
+                        ]
+                    },
+                    "errors": [],
+                    "warnings": []
+                }
+        
+                record.errors = [err];
+        
+                values.push(record);
 
             })
 
