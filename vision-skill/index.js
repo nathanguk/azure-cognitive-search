@@ -31,7 +31,7 @@ module.exports = async function (context, req) {
 
     //Response Body
     var body = {
-       "values": [values]
+       "values": values
     };
 
     //Log Response Body
