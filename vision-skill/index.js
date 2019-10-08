@@ -18,8 +18,6 @@ module.exports = async function (context, req) {
     //Parse all records input
     for(var value of req.body.values){
 
-        context.log(JSON.stringify(value));
-
         //Input Blob
         let buff = Buffer.from(value.data.imageData.data, 'base64'); 
 
@@ -62,7 +60,7 @@ module.exports = async function (context, req) {
                         "descriptions": [
                             {
                                 "value": "description",
-                                "description": ""
+                                "description": text
                             }
                         ]
                     },
@@ -70,7 +68,8 @@ module.exports = async function (context, req) {
                     "warnings": []
                 }
         
-                record.data.descriptions[0].description = text;
+                //Update the records description text
+                //record.data.descriptions[0].description = text;
         
                 values.push(record);
 
@@ -91,11 +90,11 @@ module.exports = async function (context, req) {
                             }
                         ]
                     },
-                    "errors": [],
+                    "errors": [err],
                     "warnings": []
                 }
         
-                record.errors = [err];
+                //record.errors = [err];
         
                 values.push(record);
 
