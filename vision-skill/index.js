@@ -51,11 +51,10 @@ module.exports = async function (context, req) {
         await computerVisionApiClient.analyzeImageInStream(myBlob, {visualFeatures: ["Categories", "Tags", "Description", "Color"]})
           
             .then(async function(data){
-
-                context.log(JSON.stringify(data));
                 
                 if(data.description.captions.length > 0){
                     var text = data.description.captions[0].text 
+                    context.log("Description: " + text);
                 }else{
                     var text = ""
                 };
