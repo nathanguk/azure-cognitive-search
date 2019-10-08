@@ -77,7 +77,7 @@ module.exports = async function (context, req) {
 
                 var record = {
                     "recordId": value.recordId,
-                    "data": {},
+                    "data": null,
                     "errors": [
                         {
                             "message": err.message
