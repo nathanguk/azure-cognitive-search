@@ -15,18 +15,11 @@ module.exports = async function (context, req) {
         var record = {
             "recordId": value.recordId,
             "data": {
-                "descriptions": [
-                    {
-                        "value": "thumbnail",
-                        "thumbnail": "test"
-                    }
-                ]
+                "thumbnail": b64image
             },
             "errors": null,
             "warnings": null
         }
-
-        //record.data.descriptions.thumbnail = b64image;
 
         values.push(record);
 
