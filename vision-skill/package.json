@@ -1,7 +1,7 @@
 {
   "name": "vision-skill",
   "version": "1.0.0",
-  "description": "",
+  "description": "vision-skill",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
