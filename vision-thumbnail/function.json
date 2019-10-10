@@ -13,14 +13,6 @@
         "type": "http",
         "direction": "out",
         "name": "res"
-      },
-      {
-        "name": "outputBlob",
-        "type": "blob",
-        "dataType": "binary",
-        "direction": "out",
-        "path": "thumbs/{name}",
-        "connection": "AzureWebJobsStorage"
       }
     ]
   }
