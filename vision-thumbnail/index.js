@@ -18,7 +18,7 @@ module.exports = async function (context, req) {
                 "descriptions": [
                     {
                         "value": "thumbnail",
-                        "thumbnail": b64image
+                        "thumbnail": "test"
                     }
                 ]
             },
