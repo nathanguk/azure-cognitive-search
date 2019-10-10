@@ -35,7 +35,7 @@ module.exports = async function (context, req) {
        "values": values
     };
 
-    //context.log(JSON.stringify(body));
+    context.log(JSON.stringify(body));
 
     //Return Response
     context.res = {
