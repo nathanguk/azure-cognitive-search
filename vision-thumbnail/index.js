@@ -11,11 +11,11 @@ module.exports = async function (context, req) {
         var b64image = value.data.imageData.data
 
         context.log(b64image);
-        
+
         var record = {
             "recordId": value.recordId,
             "data": {
-                "thumbnail": [
+                "descriptions": [
                     {
                         "value": "thumbnail",
                         "thumbnail": b64image
