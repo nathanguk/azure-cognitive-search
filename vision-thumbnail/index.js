@@ -21,6 +21,8 @@ module.exports = async function (context, req) {
             "warnings": null
         }
 
+        //record.data.thumbnail = b64image;
+
         values.push(record);
 
     };
@@ -30,6 +32,8 @@ module.exports = async function (context, req) {
     var body = {
        "values": values
     };
+
+    context.log(JSON.stringify(body));
 
     //Return Response
     context.res = {
