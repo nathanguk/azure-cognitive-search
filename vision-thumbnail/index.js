@@ -1,27 +1,19 @@
 module.exports = async function (context, req) {
     context.log("Image Processing Function Started!!!!");
+    context.log(JSON.stringify(context));
 
     //Import Modules
     var request = require("request-promise");
-    var azure = require('azure-storage');
-    const uuidv4 = require('uuid/v4');
-
-    //Create Blob Service
-    var blobService = azure.createBlobService();
 
     //Cognitive Services API Credentials
     var serviceKey = process.env.VISION_KEY;
     var region = process.env.VISION_REGION;
-
-    var blobcontainer = process.env.THUMBNAILS;
 
     //Create empty Array for output
     var values = [];
 
     //Parse all records input
     for(var value of req.body.values){
-
-        //context.log(value);
 
         //Input Blob
         let buff = Buffer.from(value.data.imageData.data, 'base64'); 
@@ -30,6 +22,7 @@ module.exports = async function (context, req) {
         await thumbnail(buff, value);
 
     };
+
 
     //Response Body
     var body = {
@@ -65,11 +58,9 @@ module.exports = async function (context, req) {
         };
 
         await request(options)
-            .then(async function (body) {
+            .then(function (body) {
                 //Write to Blob storage
-                var blobname = uuidv4() + '.jpg';
-                await blobService.createBlockBlobFromStream('thumbs', body, blobname)
-                var bloburl = blobcontainer + blobname
+                context.bindings.outputBlob = body;
 
                 var record = {
                     "recordId": value.recordId,
@@ -77,7 +68,7 @@ module.exports = async function (context, req) {
                         "thumbnail": [
                             {
                                 "value": "thumbnail",
-                                "thumbnail": bloburl
+                                "thumbnail": "dummyurl"
                             }
                         ]
                     },
