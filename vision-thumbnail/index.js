@@ -8,14 +8,16 @@ module.exports = async function (context, req) {
     for(var value of req.body.values){
 
         //Input Blob
-        var b64image = value.data.imageData.data
+        let buff = Buffer.from(value.data.imageData.data, 'base64'); 
+        //var b64image = value.data.imageData.data
 
-        //context.log(b64image);
+        //Write to Blob storage
+        context.bindings.outputBlob = buff;
 
         var record = {
             "recordId": value.recordId,
             "data": {
-                "thumbnail": b64image
+                "thumbnail": "text"
             },
             "errors": null,
             "warnings": null
@@ -33,7 +35,7 @@ module.exports = async function (context, req) {
        "values": values
     };
 
-    context.log(JSON.stringify(body));
+    //context.log(JSON.stringify(body));
 
     //Return Response
     context.res = {
