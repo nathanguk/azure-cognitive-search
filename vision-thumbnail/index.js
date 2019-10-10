@@ -64,7 +64,7 @@ module.exports = async function (context, req) {
                 var record = {
                     "recordId": value.recordId,
                     "data": {
-                        "descriptions": [
+                        "thumbnail": [
                             {
                                 "value": "thumbnail",
                                 "thumbnail": "dummyurl"
