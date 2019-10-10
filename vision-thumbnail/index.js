@@ -10,6 +10,8 @@ module.exports = async function (context, req) {
         //Input Blob
         var b64image = value.data.imageData.data
 
+        context.log(b64image);
+        
         var record = {
             "recordId": value.recordId,
             "data": {
