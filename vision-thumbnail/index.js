@@ -53,7 +53,7 @@ module.exports = async function (context, req) {
             },
             body: image,
             encoding: null,
-            json: true
+            json: false
         };
 
         await request(options)
