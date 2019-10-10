@@ -26,7 +26,7 @@ module.exports = async function (context, req) {
             "warnings": null
         }
 
-        record.data.descriptions.thumnail = b64image;
+        record.data.descriptions.thumbnail = b64image;
 
         values.push(record);
 
