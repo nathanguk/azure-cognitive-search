@@ -1,6 +1,5 @@
 module.exports = async function (context, req) {
     context.log("Image Processing Function Started!!!!");
-    context.log(JSON.stringify(context));
 
     //Create empty Array for output
     var values = [];
