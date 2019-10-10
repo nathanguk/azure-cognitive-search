@@ -14,6 +14,8 @@ module.exports = async function (context, req) {
     //Parse all records input
     for(var value of req.body.values){
 
+        context.log(value);
+
         //Input Blob
         let buff = Buffer.from(value.data.imageData.data, 'base64'); 
 
