@@ -18,21 +18,43 @@ module.exports = async function (context, req) {
         var filename = uuidv4() + '.jpg';
         var thumbnails = process.env.THUMBNAILS + filename;
 
-        await blobService.createBlockBlobFromStream('thumbs', filename, buff, buff.byteLength);
+        await blobService.createBlockBlobFromStream('thumbs', filename, buff, buff.byteLength)
 
-        //Write to Blob storage
-        //context.bindings.outputBlob = buff;
+            .then(function(){    
 
-        var record = {
-            "recordId": value.recordId,
-            "data": {
-                "thumbnail": thumbnails
-            },
-            "errors": null,
-            "warnings": null
-        }
+                 //Write to Blob storage
+                //context.bindings.outputBlob = buff;
 
-        values.push(record);
+                var record = {
+                    "recordId": value.recordId,
+                    "data": {
+                        "thumbnail": thumbnails
+                    },
+                    "errors": null,
+                    "warnings": null
+                }
+
+                values.push(record);
+
+            })
+
+            .catch(function(err) {
+                context.log('Caught Error: ' + err.message);
+
+                var record = {
+                    "recordId": value.recordId,
+                    "data": null,
+                    "errors": null,
+                    "warnings": [
+                        {
+                            "message": err.message
+                        }
+                    ]
+                }
+        
+                values.push(record);
+
+            })
 
     };
 
