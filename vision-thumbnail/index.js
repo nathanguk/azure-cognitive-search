@@ -2,7 +2,7 @@ module.exports = async function (context, req) {
     context.log("Image Processing Function Started!!!!");
 
     var azure = require('azure-storage');
-    var uuidv4 = require('uuid/v4');
+    const uuidv4 = require('uuid/v4');
     var blobService = azure.createBlobService();
 
     //Create empty Array for output
