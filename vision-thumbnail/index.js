@@ -2,7 +2,7 @@ module.exports = async function (context, req) {
     context.log("Image Processing Function Started!!!!");
 
     var azure = require('azure-storage');
-    var uuidv4 = require('uuidv4');
+    var uuidv4 = require('uuid/v4');
     var blobService = azure.createBlobService();
 
     //Create empty Array for output
@@ -14,7 +14,7 @@ module.exports = async function (context, req) {
         //Input Blob
         let buff = Buffer.from(value.data.imageData.data, 'base64'); 
         //var b64image = value.data.imageData.data
-
+        
         var filename = uuidv4() + '.jpg';
         var thumbnails = process.env.THUMBNAILS + filename;
 
