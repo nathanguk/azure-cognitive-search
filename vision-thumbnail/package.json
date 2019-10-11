@@ -8,5 +8,8 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "azure-storage": "^2.10.3",
+    "uuidv4": "^5.0.1"
+  }
 }
